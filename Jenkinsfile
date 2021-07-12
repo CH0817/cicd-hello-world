@@ -15,6 +15,8 @@ node {
             def imageName = "${project_name}:${tag}"
             echo "===================== 編譯並產生 docker image，docker image 結果由 dockerfile-maven-plugin 決定 ====================="
             sh "mvn clean package dockerfile:build"
+            // image 上 tag
+            sh "docker tag ${imageName} ${harbor_hostname}/${harbor_repository}/${imageName}"
             echo "===================== 編譯並產生 docker image 成功 ====================="
             withCredentials([usernamePassword(credentialsId: 'c9328d3d-eb2c-45b7-801e-45e228d3a3ed', passwordVariable: 'password', usernameVariable: 'username')]) {
                 echo "===================== 上傳 image: ${imageName} 到 Harbor"
@@ -24,9 +26,10 @@ node {
                 sh "docker push ${harbor_hostname}/${harbor_repository}/${imageName}"
                 echo "===================== 上傳 image: ${imageName} 到 Harbor 成功"
             }
-            echo "===================== 刪除 image: ${imageName} ====================="
+            echo "===================== 刪除本地 image ====================="
             sh "docker rmi -f ${imageName}"
-            echo "===================== 刪除 image: ${imageName} 成功 ====================="
+            sh "docker rmi -f ${harbor_hostname}/${harbor_repository}/${imageName}"
+            echo "===================== 刪除本地 image 成功 ====================="
         }
     }
 }
