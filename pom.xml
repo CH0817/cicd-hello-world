@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>tw.com.rex</groupId>
-    <artifactId>hello-world</artifactId>
+    <artifactId>cicd-hello-world</artifactId>
     <version>1.0-RELEASE</version>
     <name>hello-world</name>
     <description>Demo project for Spring Boot</description>
